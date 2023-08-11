@@ -36,7 +36,7 @@ _cities[32]=" Achhnera | Agra | Akbarpur | Aliganj | Aligarh | Allahabad | Ambed
 _cities[33]=" Almora | Bageshwar | Bhatwari | Chakrata | Chamoli | Champawat | Dehradun | Deoprayag | Dharchula | Dunda | Haldwani | Haridwar | Joshimath | Karan Prayag | Kashipur | Khatima | Kichha | Lansdown | Munsiari | Mussoorie | Nainital | Pantnagar | Partapnagar | Pauri Garhwal | Pithoragarh | Purola | Rajgarh | Ranikhet | Roorkee | Rudraprayag | Tehri Garhwal | Udham Singh Nagar | Ukhimath | Uttarkashi ";
 _cities[34]=" Adra | Alipurduar | Amlagora | Arambagh | Asansol | Balurghat | Bankura | Bardhaman | Basirhat | Berhampur | Bethuadahari | Birbhum | Birpara | Bishanpur | Bolpur | Bongoan | Bulbulchandi | Burdwan | Calcutta | Canning | Champadanga | Contai | Cooch Behar | Daimond Harbour | Dalkhola | Dantan | Darjeeling | Dhaniakhali | Dhuliyan | Dinajpur | Dinhata | Durgapur | Gangajalghati | Gangarampur | Ghatal | Guskara | Habra | Haldia | Harirampur | Harishchandrapur | Hooghly | Howrah | Islampur | Jagatballavpur | Jalpaiguri | Jhalda | Jhargram | Kakdwip | Kalchini | Kalimpong | Kalna | Kandi | Karimpur | Katwa | Kharagpur | Khatra | Krishnanagar | Mal Bazar | Malda | Manbazar | Mathabhanga | Medinipur | Mekhliganj | Mirzapur | Murshidabad | Nadia | Nagarakata | Nalhati | Nayagarh | Parganas | Purulia | Raiganj | Rampur Hat | Ranaghat | Seharabazar | Siliguri | Suri | Takipur | Tamluk";
 
-$.fn.extend({ 
+$.fn.extend({
 
     states: function(options) {
         var defaults = {
@@ -93,29 +93,37 @@ $.fn.extend({
             }).flat().sort())
         }
 
-        function ganerateCityList(el,o,cities)
+        function ganerateCityList(el,cities)
         {
-            var element = $(el)
-                    .find('option')
-                    .remove()
-                    .end()
-                    .append(`<option value="">${o.placeholder?o.placeholder:"Select City"}</option>`)
-
+            var optEles = []
+            optEles.push(
+                $("<option></option>")
+                    .attr("value",'')
+                    .attr("selected",true)
+                    .text(options.placeholder?options.placeholder:"Select City")
+                    .prop("outerHTML")
+            )
             for(var city of cities){
-                $("<option />",{
-                    value:city.trim(),
-                    text:city.trim(),
-                    selected:city.trim()==o.default
-                }).appendTo(element)
+                optEles.push(
+                    $("<option></option>")
+                        .attr("value", city.trim())
+                        .attr("selected",city.trim()==options.default)
+                        .text(city.trim())
+                        .prop("outerHTML")
+                )
             }
+            return optEles
         }
-
+        var optEles = ganerateCityList(this,getCities(options));
         return this.each(function() {
             let is_select = $(this).is("select");
 
             if(is_select){
-                var cities = getCities(options);
-                ganerateCityList(this,options,cities);
+                $(this).find('option')
+                    .remove()
+                    .end()
+                    .html(optEles.join(''))
+
             }else{
                 console.error($(this) ,'is not select element')
             }
