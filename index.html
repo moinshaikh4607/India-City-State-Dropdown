@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="cdn.jsdelivr.net_npm_bootstrap@5.3.0_dist_css_bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <title>States and Cities</title>
+    <style type="text/css">
+        
+    </style>
+</head>
+<body>
+    <div class="container mt-5 p-5">
+        <div class="text-center">
+            <h1>States and Cities (India)</h1>
+        </div>
+
+        <div class="container text-center m-5 p-5">
+            <select class="form-select cities" id="city">
+                <option value="" selected>Select City</option>
+            </select>
+        </div>
+        <div class="container text-center m-5 p-5">
+            <select class="form-select states" id="state">
+                <option value="" selected>Select State</option>
+            </select>
+        </div>
+    </div>
+    <script src="cities.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+            $(document).ready(function(){
+                $(".states")
+                    .states()
+                    .select2();
+
+                $('#state').on('change',(e)=>{
+                    let selectedCity = $('#city').val()
+                    if(!selectedCity){
+                        $('#city')
+                            .cities({
+                                state:e.target.value.trim()
+                            })
+                            .select2();
+                    }
+                });
+
+                $(".cities")
+                    .cities()
+                    .select2();
+
+            });
+            // console.log()
+    </script>
+</body>
+</html>
